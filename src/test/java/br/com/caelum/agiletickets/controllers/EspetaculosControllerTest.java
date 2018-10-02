@@ -22,6 +22,8 @@ import static org.hamcrest.Matchers.is;
 
 import static org.junit.Assert.assertThat;
 
+import static org.mockito.Matchers.contains;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -36,13 +38,13 @@ public class EspetaculosControllerTest {
 	private EspetaculosController controller;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		controller = new EspetaculosController(result, validator, agenda, estabelecimentos);
 	}
 
 	@Test(expected=ValidationException.class)
-	public void naoDeveCadastrarEspetaculosSemNome() throws Exception {
+	public void naoDeveCadastrarEspetaculosSemNome() {
 		Espetaculo espetaculo = new Espetaculo();
 		espetaculo.setDescricao("uma descricao");
 
@@ -52,7 +54,7 @@ public class EspetaculosControllerTest {
 	}
 
 	@Test(expected=ValidationException.class)
-	public void naoDeveCadastrarEspetaculosSemDescricao() throws Exception {
+	public void naoDeveCadastrarEspetaculosSemDescricao() {
 		Espetaculo espetaculo = new Espetaculo();
 		espetaculo.setNome("um nome");
 
@@ -62,7 +64,7 @@ public class EspetaculosControllerTest {
 	}
 
 	@Test
-	public void deveCadastrarEspetaculosComNomeEDescricao() throws Exception {
+	public void deveCadastrarEspetaculosComNomeEDescricao() {
 		Espetaculo espetaculo = new Espetaculo();
 		espetaculo.setNome("um nome");
 		espetaculo.setDescricao("uma descricao");
@@ -73,7 +75,7 @@ public class EspetaculosControllerTest {
 	}
 	
 	@Test
-	public void deveRetornarNotFoundSeASessaoNaoExiste() throws Exception {
+	public void deveRetornarNotFoundSeASessaoNaoExiste() {
 		when(agenda.sessao(1234l)).thenReturn(null);
 
 		controller.sessao(1234l);
@@ -82,28 +84,28 @@ public class EspetaculosControllerTest {
 	}
 
 	@Test(expected=ValidationException.class)
-	public void naoDeveReservarZeroIngressos() throws Exception {
+	public void naoDeveReservarZeroIngressos() {
 		when(agenda.sessao(1234l)).thenReturn(new Sessao());
 
-		controller.reserva(1234l, 0);
+		controller.reserva(1234l, 0, false);
 
 		verifyZeroInteractions(result);
 	}
 
 	@Test(expected=ValidationException.class)
-	public void naoDeveReservarMaisIngressosQueASessaoPermite() throws Exception {
+	public void naoDeveReservarMaisIngressosQueASessaoPermite() {
 		Sessao sessao = new Sessao();
 		sessao.setTotalIngressos(3);
 
 		when(agenda.sessao(1234l)).thenReturn(sessao);
 
-		controller.reserva(1234l, 5);
+		controller.reserva(1234l, 5, false);
 
 		verifyZeroInteractions(result);
 	}
 
 	@Test
-	public void deveReservarSeASessaoTemIngressosSuficientes() throws Exception {
+	public void deveReservarSeASessaoTemIngressosSuficientes() {
 		Espetaculo espetaculo = new Espetaculo();
 		espetaculo.setTipo(TipoDeEspetaculo.TEATRO);
 
@@ -114,9 +116,26 @@ public class EspetaculosControllerTest {
 
 		when(agenda.sessao(1234l)).thenReturn(sessao);
 
-		controller.reserva(1234l, 3);
+		controller.reserva(1234l, 3, false);
 
 		assertThat(sessao.getIngressosDisponiveis(), is(2));
+	}
+
+	@Test
+	public void deveCobrarMeia_seEhEstudante() {
+		Espetaculo espetaculo = new Espetaculo();
+		espetaculo.setTipo(TipoDeEspetaculo.TEATRO);
+
+		Sessao sessao = new Sessao();
+		sessao.setPreco(new BigDecimal("10.00"));
+		sessao.setTotalIngressos(200);
+		sessao.setEspetaculo(espetaculo);
+
+		when(agenda.sessao(1234l)).thenReturn(sessao);
+
+		controller.reserva(1234l, 1, true);
+
+		verify(result).include(eq("message"), contains("R$ 5,00"));
 	}
 
 }

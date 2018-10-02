@@ -106,9 +106,9 @@ public class EspetaculosController {
 
 		result.include("sessao", sessao);
 	}
-	
+
 	@Post @Path("/sessao/{sessaoId}/reserva")
-	public void reserva(Long sessaoId, final Integer quantidade) {
+	public void reserva(Long sessaoId, final Integer quantidade, final boolean ehEstudante) {
 		Sessao sessao = agenda.sessao(sessaoId);
 		if (sessao == null) {
 			result.notFound();
@@ -127,6 +127,7 @@ public class EspetaculosController {
 		validator.onErrorRedirectTo(this).sessao(sessao.getId());
 
 		BigDecimal precoTotal = CalculadoraDePrecos.calcula(sessao, quantidade);
+		precoTotal = ehEstudante ? precoTotal.divide(BigDecimal.valueOf(2)) : precoTotal;
 
 		sessao.reserva(quantidade);
 

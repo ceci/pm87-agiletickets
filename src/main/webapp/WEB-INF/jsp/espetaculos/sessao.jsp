@@ -46,7 +46,8 @@
 				<h3>Reservar ingresso</h3>
 				<label for="qtde">Quantidade</label>
 				<input id="qtde" name="quantidade"/>
-				
+				<label for="desconto">É estudante?</label>
+				<input id="desconto" name="ehEstudante" type="checkbox">
 				<input type="submit" value="Reservar"/>
 			</form>
 		</c:if>
