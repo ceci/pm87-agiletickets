@@ -11,27 +11,27 @@ public enum TipoDeEspetaculo {
 	ORQUESTRA(0.50, 0.20, 60, 0.10);
 
 	private double porcentagemDaEscassez;
-	private double aumentoPorEscassez;
+	private double acrescimoPorEscassez;
 	private int duracaoLimite;
-	private double aumentoPorDuracao;
+	private double acrescimoPorDuracao;
 
-	TipoDeEspetaculo(double porcentagemDaEscassez, double aumentoPorEscassez, int duracaoLimite, double aumentoPorDuracao) {
+	TipoDeEspetaculo(double porcentagemDaEscassez, double acrescimoPorEscassez, int duracaoLimite, double acrescimoPorDuracao) {
 		this.porcentagemDaEscassez = porcentagemDaEscassez;
-		this.aumentoPorEscassez = aumentoPorEscassez;
+		this.acrescimoPorEscassez = acrescimoPorEscassez;
 		this.duracaoLimite = duracaoLimite;
-		this.aumentoPorDuracao = aumentoPorDuracao;
+		this.acrescimoPorDuracao = acrescimoPorDuracao;
 	}
 
-	public BigDecimal getAumentoPorEscassez() {
-		return BigDecimal.valueOf(aumentoPorEscassez);
+	public BigDecimal getAcrescimoPorEscassez() {
+		return BigDecimal.valueOf(acrescimoPorEscassez);
 	}
 
 	public int getDuracaoLimite() {
 		return duracaoLimite;
 	}
 
-	public BigDecimal getAumentoPorDuracao() {
-		return BigDecimal.valueOf(aumentoPorDuracao);
+	public BigDecimal getAcrescimoPorDuracao() {
+		return BigDecimal.valueOf(acrescimoPorDuracao);
 	}
 
 	public double getPorcentagemDaEscassez() {
