@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import br.com.caelum.agiletickets.acceptance.BaseTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,10 +18,6 @@ public class EstabelecimentosPage {
 
 	public EstabelecimentosPage(WebDriver driver) {
 		this.driver = driver;
-	}
-
-	public void abreListagem() {
-		driver.get(BASE_URL + "/estabelecimentos");
 	}
 
 	public void adicioneEstabelecimento(String nome, String endereco) {

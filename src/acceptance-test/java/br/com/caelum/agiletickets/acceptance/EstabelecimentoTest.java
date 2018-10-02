@@ -1,79 +1,50 @@
 package br.com.caelum.agiletickets.acceptance;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-
 import br.com.caelum.agiletickets.acceptance.page.EstabelecimentosPage;
+import org.junit.Before;
+import org.junit.Test;
 
-public class EstabelecimentoTest {
+public class EstabelecimentoTest extends BaseTest {
 
-	public static String BASE_URL = "http://localhost:8080";
-	private static WebDriver browser;
 	private EstabelecimentosPage estabelecimentos;
 
-	@BeforeClass
-	public static void abreBrowser() {
-		System.setProperty("webdriver.gecko.driver", "geckodriver");
-		browser = new FirefoxDriver();
-	}
-
 	@Before
-	public void setUp() throws Exception {
-		estabelecimentos = new EstabelecimentosPage(browser);
-	}
-
-	@AfterClass
-	public static void teardown() {
-		browser.close();
+	public void setUp() {
+		estabelecimentos = indexPage.navegaParaEstabelecimentos();
 	}
 
 	@Test
-	public void aoAdicionarUmEstabelecimentoDeveMostraLoNaTabela() throws Exception {
-		estabelecimentos.abreListagem();
-
+	public void aoAdicionarUmEstabelecimentoDeveMostraLoNaTabela() {
 		estabelecimentos.adicioneEstabelecimento("Caelum", "R. Vergueiro, 3185");
 
 		estabelecimentos.ultimaLinhaDeveConter("Caelum", "R. Vergueiro, 3185");
 	}
 
 	@Test
-	public void aoAdicionarUmEstabelecimentoSemNomeDeveMostrarErro() throws Exception {
-		estabelecimentos.abreListagem();
-
+	public void aoAdicionarUmEstabelecimentoSemNomeDeveMostrarErro() {
 		estabelecimentos.adicioneEstabelecimento("", "R. Vergueiro, 3185");
 
 		estabelecimentos.deveMostrarErro("O nome não pode ser vazio");
 	}
 
 	@Test
-	public void aoAdicionarUmEstabelecimentoSemEnderecoDeveMostrarErro() throws Exception {
-		estabelecimentos.abreListagem();
-
+	public void aoAdicionarUmEstabelecimentoSemEnderecoDeveMostrarErro() {
 		estabelecimentos.adicioneEstabelecimento("Caelum", "");
 
 		estabelecimentos.deveMostrarErro("O endereco não pode ser vazio");
 	}
 
 	@Test
-	public void mostraQueHaEstacionamentoQuandoCadastramosQueSim() throws Exception {
-		estabelecimentos.abreListagem();
-
+	public void mostraQueHaEstacionamentoQuandoCadastramosQueSim() {
 		estabelecimentos.adicioneEstabelecimentoComEstacionamento(true);
 
 		estabelecimentos.ultimaLinhaDeveTerEstacionamento(true);
 	}
 
 	@Test
-	public void mostraQueNaoHaEstacionamentoQuandoCadastramosQueNao() throws Exception {
-		estabelecimentos.abreListagem();
-
+	public void mostraQueNaoHaEstacionamentoQuandoCadastramosQueNao() {
 		estabelecimentos.adicioneEstabelecimentoComEstacionamento(false);
 
 		estabelecimentos.ultimaLinhaDeveTerEstacionamento(false);
 	}
-	
 }
