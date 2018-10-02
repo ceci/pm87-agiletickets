@@ -26,7 +26,7 @@ public class Sessao {
 	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	private DateTime inicio;
 
-	private Integer duracaoEmMinutos;
+	private Integer duracaoEmMinutos = 0;
 
 	private Integer totalIngressos = 0;
 
@@ -87,22 +87,11 @@ public class Sessao {
 	}
 
 	public Integer getIngressosDisponiveis() {
-		// faz a conta de total de ingressos menos ingressos reservados
 		return totalIngressos - ingressosReservados;
 	}
 	
-	// Era usada antes no sistema para avisar o cliente de que
-    // os ingressos estavam acabando!
-    // Hoje nao serve pra nada, mas eh sempre bom ter
-    // um backup guardado! ;)
-    public boolean pertoDoLimiteDeSeguranca_NaoUtilizada()
-    {
-            int limite = 3;
-            return getIngressosDisponiveis() > limite;
-    }
 
 	public void reserva(Integer numeroDeIngressos) {
-		// soma quantidade na variavel ingressos reservados
 		this.ingressosReservados += numeroDeIngressos;
 	}
 
@@ -120,5 +109,8 @@ public class Sessao {
 	public BigDecimal getPreco() {
 		return preco;
 	}
-	
+
+	public double porcentagemDeIngressosDisponiveis() {
+		return this.getIngressosDisponiveis() / this.getTotalIngressos().doubleValue();
+	}
 }
