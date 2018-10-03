@@ -7,13 +7,15 @@ import br.com.caelum.agiletickets.models.TipoDeEspetaculo;
 
 public class CalculadoraDePrecos {
 
-	public static BigDecimal calcula(Sessao sessao, Integer quantidade) {
+	public static BigDecimal calcula(Sessao sessao, Integer quantidade, boolean ehEstudante) {
 		TipoDeEspetaculo tipoDeEspetaculo = sessao.getEspetaculo().getTipo();
 
-		return sessao.getPreco()
-				.add(acrescimoPorEscassez(sessao, tipoDeEspetaculo))
-				.add(acrescimoPorDuracao(sessao, tipoDeEspetaculo))
-				.multiply(BigDecimal.valueOf(quantidade));
+		BigDecimal preco = sessao.getPreco()
+							.add(acrescimoPorEscassez(sessao, tipoDeEspetaculo))
+							.add(acrescimoPorDuracao(sessao, tipoDeEspetaculo))
+							.multiply(BigDecimal.valueOf(quantidade));
+
+		return ehEstudante ? preco.divide(BigDecimal.valueOf(2)) : preco;
 	}
 
 	private static BigDecimal acrescimoPorDuracao(Sessao sessao, TipoDeEspetaculo tipoDeEspetaculo) {

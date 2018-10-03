@@ -126,8 +126,7 @@ public class EspetaculosController {
 		// em caso de erro, redireciona para a lista de sessao
 		validator.onErrorRedirectTo(this).sessao(sessao.getId());
 
-		BigDecimal precoTotal = CalculadoraDePrecos.calcula(sessao, quantidade);
-		precoTotal = ehEstudante ? precoTotal.divide(BigDecimal.valueOf(2)) : precoTotal;
+		BigDecimal precoTotal = CalculadoraDePrecos.calcula(sessao, quantidade, ehEstudante);
 
 		sessao.reserva(quantidade);
 
